@@ -2,6 +2,8 @@
 
 ## Description
 An Android application in Kotlin for browsing list of films, that are popular right now.
+![main_page](./images/main_page.jpg)
+![info_page](./images/info_page.jpg)
 
 ## Libraries
 * **Ktor-client** - sending requests to API
