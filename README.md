@@ -5,6 +5,9 @@ An Android application in Kotlin for browsing list of films, that are popular ri
 ![main_page](./images/main_page.jpg)
 ![info_page](./images/info_page.jpg)
 
+## UI Framework
+Jetpack Compose
+
 ## Libraries
 * **Ktor-client** - sending requests to API
 * **Coil** - showing an image based on the model's URL
