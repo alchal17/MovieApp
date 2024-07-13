@@ -1,6 +1,5 @@
 package com.example.movieapp.ui.pages
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -11,13 +10,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -65,6 +59,6 @@ fun SharedTransitionScope.MoviesListPage(
         }
     }
     LaunchedEffect(context.lazyVerticalGridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == moviesViewModel.movies.size - 1 && !moviesViewModel.moviesFetching.value) {
-        moviesViewModel.fetchMovies()
+        moviesViewModel.addMovies()
     }
 }

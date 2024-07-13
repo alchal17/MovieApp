@@ -5,15 +5,15 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.SnapshotStateList
-import androidx.lifecycle.viewModelScope
-import com.example.movieapp.API_KEY
+import androidx.lifecycle.ViewModel
 import com.example.movieapp.models.Movie
-import io.ktor.client.request.get
-import kotlinx.coroutines.launch
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import com.example.movieapp.repositories.MovieAPI
+import com.example.movieapp.repositories.ServerResponse
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class MovieViewModel : BaseViewModel() {
+@HiltViewModel
+class MovieViewModel @Inject constructor(private val apiRepository: MovieAPI) : ViewModel() {
     private val _movies = mutableStateListOf<Movie>()
     val movies: SnapshotStateList<Movie> get() = _movies
 
@@ -22,22 +22,18 @@ class MovieViewModel : BaseViewModel() {
 
     private var currentPage = 0
 
-    @Serializable
-    private data class MovieResponse(
-        @SerialName("results") val results: List<Movie>
-    )
-
-    suspend fun fetchMovies() {
+    suspend fun addMovies() {
         moviesFetching.value = true
-        try {
-            val response: MovieResponse =
-                client.get("$serverPath/3/trending/movie/day?api_key=$API_KEY&page=${currentPage + 1}")
-            _movies.addAll(response.results)
-            currentPage++
-        } catch (e: Exception) {
-            Log.d("error", e.localizedMessage ?: "Unknown error")
-        } finally {
-            moviesFetching.value = false
+        when (val response = apiRepository.getMovies(currentPage)) {
+            is ServerResponse.Error -> {
+                Log.d("error", response.message)
+            }
+
+            is ServerResponse.Success -> {
+                _movies.addAll(response.results)
+                currentPage++
+            }
         }
+        moviesFetching.value = false
     }
 }

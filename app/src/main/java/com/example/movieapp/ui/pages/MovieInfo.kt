@@ -44,7 +44,7 @@ fun SharedTransitionScope.MovieInfo(
     overview: String,
     releaseDate: String,
     originalLanguage: String,
-    animatedVisibilityScope: AnimatedVisibilityScope
+    animatedVisibilityScope: AnimatedVisibilityScope,
 ) {
     Box(
         modifier = Modifier

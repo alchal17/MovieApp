@@ -8,8 +8,7 @@ import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
-import androidx.compose.runtime.remember
-import androidx.lifecycle.ViewModelProvider
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -20,7 +19,9 @@ import com.example.movieapp.ui.pages.MoviesListPage
 import com.example.movieapp.ui.pages.MoviesListRoute
 import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.viewmodels.MovieViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     lateinit var lazyVerticalGridState: LazyGridState
     lateinit var moviesViewModel: MovieViewModel
@@ -30,9 +31,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            moviesViewModel = remember {
-                ViewModelProvider(this@MainActivity)[MovieViewModel::class.java]
-            }
+            moviesViewModel = hiltViewModel()
             lazyVerticalGridState = rememberLazyGridState()
             val navController = rememberNavController()
             MovieAppTheme {
