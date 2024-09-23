@@ -7,7 +7,7 @@ object MoviesListRoute
 
 @Serializable
 data class MovieInfoRoute(
-    val posterPath: String,
+    val posterPath: String?,
     val id: String,
     val title: String,
     val overview: String,

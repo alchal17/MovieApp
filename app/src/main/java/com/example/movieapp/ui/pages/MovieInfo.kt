@@ -19,6 +19,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -38,82 +43,96 @@ import com.example.movieapp.R
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalAnimationSpecApi::class)
 @Composable
 fun SharedTransitionScope.MovieInfo(
-    posterPath: String,
+    posterPath: String?,
     id: String,
     title: String,
     overview: String,
     releaseDate: String,
     originalLanguage: String,
     animatedVisibilityScope: AnimatedVisibilityScope,
+    floatingActionButtonClick: () -> Unit
 ) {
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(Color.DarkGray)
-    ) {
-        Column(
-            modifier = Modifier.verticalScroll(rememberScrollState())
+    Scaffold(floatingActionButton = {
+        FloatingActionButton(
+            onClick = floatingActionButtonClick,
+            containerColor = Color.Black.copy(alpha = 0.5f)
         ) {
-            Image(
-                painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/w500${posterPath}"),
-                contentDescription = "Movie Poster",
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(horizontal = 25.dp)
-                    .aspectRatio(9 / 16f)
-                    .sharedElement(
-                        state = rememberSharedContentState(key = "image/${id}"),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        boundsTransform = { _, _ -> tween(500) }),
-                contentScale = ContentScale.Fit,
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                null
             )
-
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 19.dp),
-                contentAlignment = Alignment.Center
-            ) {
-                Text(
-                    text = title,
-                    style = TextStyle(
-                        color = Color.LightGray,
-                        fontSize = 30.sp,
-                        textAlign = TextAlign.Center
-                    ),
-                    fontFamily = FontFamily(
-                        Font(R.font.oswald_semi_bold, FontWeight.Normal)
-                    ),
-                    modifier = Modifier.sharedBounds(
-                        sharedContentState = rememberSharedContentState(key = "title/${id}"),
-                        animatedVisibilityScope = animatedVisibilityScope,
-                        boundsTransform = { initialBounds, targetBounds ->
-                            keyframes {
-                                durationMillis = 500
-                                initialBounds at 0 using ArcMode.ArcBelow using FastOutSlowInEasing
-                                targetBounds at 500
-                            }
-                        })
-                )
-            }
+        }
+    }) { padding ->
+        Box(
+            modifier = Modifier
+                .padding(padding)
+                .fillMaxSize()
+                .background(Color.DarkGray)
+        ) {
             Column(
-                horizontalAlignment = Alignment.Start,
-                modifier = Modifier.padding(bottom = 15.dp, start = 20.dp, end = 13.dp),
-                verticalArrangement = Arrangement.spacedBy(17.dp)
+                modifier = Modifier.verticalScroll(rememberScrollState())
             ) {
-                Text(
-                    text = overview,
-                    style = TextStyle(color = Color.LightGray, fontSize = 15.sp),
-                    lineHeight = 23.sp
+                Image(
+                    painter = rememberAsyncImagePainter("https://image.tmdb.org/t/p/w500${posterPath}"),
+                    contentDescription = "Movie Poster",
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 25.dp)
+                        .aspectRatio(9 / 16f)
+                        .sharedElement(
+                            state = rememberSharedContentState(key = "image/${id}"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { _, _ -> tween(500) }),
+                    contentScale = ContentScale.Fit,
                 )
-                Text(
-                    text = "Release date: ${releaseDate}",
-                    style = TextStyle(color = Color.LightGray)
-                )
-                Text(
-                    text = "Language: ${originalLanguage.toUpperCase()}",
-                    style = TextStyle(color = Color.LightGray)
-                )
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 19.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = title,
+                        style = TextStyle(
+                            color = Color.LightGray,
+                            fontSize = 30.sp,
+                            textAlign = TextAlign.Center
+                        ),
+                        fontFamily = FontFamily(
+                            Font(R.font.oswald_semi_bold, FontWeight.Normal)
+                        ),
+                        modifier = Modifier.sharedBounds(
+                            sharedContentState = rememberSharedContentState(key = "title/${id}"),
+                            animatedVisibilityScope = animatedVisibilityScope,
+                            boundsTransform = { initialBounds, targetBounds ->
+                                keyframes {
+                                    durationMillis = 500
+                                    initialBounds at 0 using ArcMode.ArcBelow using FastOutSlowInEasing
+                                    targetBounds at 500
+                                }
+                            })
+                    )
+                }
+                Column(
+                    horizontalAlignment = Alignment.Start,
+                    modifier = Modifier.padding(bottom = 15.dp, start = 20.dp, end = 13.dp),
+                    verticalArrangement = Arrangement.spacedBy(17.dp)
+                ) {
+                    Text(
+                        text = overview,
+                        style = TextStyle(color = Color.LightGray, fontSize = 15.sp),
+                        lineHeight = 23.sp
+                    )
+                    Text(
+                        text = "Release date: $releaseDate",
+                        style = TextStyle(color = Color.LightGray)
+                    )
+                    Text(
+                        text = "Language: ${originalLanguage.uppercase()}",
+                        style = TextStyle(color = Color.LightGray)
+                    )
+                }
             }
         }
     }

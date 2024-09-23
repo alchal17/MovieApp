@@ -10,7 +10,7 @@ import java.util.UUID
 data class Movie(
     val uniqueID: String = UUID.randomUUID().toString(),
     @SerialName("overview") val overview: String,
-    @SerialName("poster_path") val posterPath: String,
+    @SerialName("poster_path") val posterPath: String?,
     @SerialName("title") val title: String,
     @SerialName("original_language") val originalLanguage: String,
     @SerialName("release_date") val releaseDate: String,

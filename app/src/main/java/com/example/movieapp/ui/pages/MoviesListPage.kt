@@ -26,7 +26,7 @@ fun SharedTransitionScope.MoviesListPage(
     context: MainActivity,
     animatedVisibilityScope: AnimatedVisibilityScope,
     cardOnClick: (
-        posterPath: String,
+        posterPath: String?,
         id: String,
         title: String,
         overview: String,

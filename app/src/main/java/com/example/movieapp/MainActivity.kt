@@ -41,7 +41,7 @@ class MainActivity : ComponentActivity() {
                             MoviesListPage(
                                 context = this@MainActivity,
                                 animatedVisibilityScope = this,
-                                cardOnClick = { posterPath: String,
+                                cardOnClick = { posterPath: String?,
                                                 id: String,
                                                 title: String,
                                                 overview: String,
@@ -69,7 +69,8 @@ class MainActivity : ComponentActivity() {
                                 overview = args.overview,
                                 releaseDate = args.releaseDate,
                                 originalLanguage = args.originalLanguage,
-                                animatedVisibilityScope = this
+                                animatedVisibilityScope = this,
+                                floatingActionButtonClick = { navController.navigateUp() }
                             )
                         }
                     }
