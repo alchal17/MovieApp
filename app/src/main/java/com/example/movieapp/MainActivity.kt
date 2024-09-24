@@ -6,7 +6,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
-import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
@@ -23,23 +22,21 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
-    lateinit var lazyVerticalGridState: LazyGridState
-    lateinit var moviesViewModel: MovieViewModel
-
     @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            moviesViewModel = hiltViewModel()
-            lazyVerticalGridState = rememberLazyGridState()
+            val moviesViewModel = hiltViewModel<MovieViewModel>()
+            val lazyVerticalGridState = rememberLazyGridState()
             val navController = rememberNavController()
             MovieAppTheme {
                 SharedTransitionLayout {
                     NavHost(navController = navController, startDestination = MoviesListRoute) {
                         composable<MoviesListRoute> {
                             MoviesListPage(
-                                context = this@MainActivity,
+                                moviesViewModel = moviesViewModel,
+                                lazyVerticalGridState = lazyVerticalGridState,
                                 animatedVisibilityScope = this,
                                 cardOnClick = { posterPath: String?,
                                                 id: String,
