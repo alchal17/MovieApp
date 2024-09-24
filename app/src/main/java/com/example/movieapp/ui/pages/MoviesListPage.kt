@@ -8,22 +8,26 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import com.example.movieapp.MainActivity
 import com.example.movieapp.ui.elements.MainTopBar
 import com.example.movieapp.ui.elements.MovieCard
+import com.example.movieapp.viewmodels.MovieViewModel
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 fun SharedTransitionScope.MoviesListPage(
-    context: MainActivity,
+    moviesViewModel: MovieViewModel,
+    lazyVerticalGridState: LazyGridState,
     animatedVisibilityScope: AnimatedVisibilityScope,
     cardOnClick: (
         posterPath: String?,
@@ -34,7 +38,7 @@ fun SharedTransitionScope.MoviesListPage(
         originalLanguage: String
     ) -> Unit
 ) {
-    val moviesViewModel = context.moviesViewModel
+    val movies by moviesViewModel.movies.collectAsState()
     Scaffold(topBar = { MainTopBar() }, containerColor = Color.DarkGray) { paddingValues ->
         Box(
             modifier = Modifier
@@ -43,14 +47,14 @@ fun SharedTransitionScope.MoviesListPage(
         ) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(3),
-                state = context.lazyVerticalGridState,
+                state = lazyVerticalGridState,
                 verticalArrangement = Arrangement.spacedBy(15.dp)
             ) {
                 items(
-                    moviesViewModel.movies.size,
-                    key = { index -> moviesViewModel.movies[index].uniqueID }) {
+                    movies.size,
+                    key = { index -> movies[index].uniqueID }) {
                     MovieCard(
-                        movie = moviesViewModel.movies[it],
+                        movie = movies[it],
                         onClick = cardOnClick,
                         animatedVisibilityScope = animatedVisibilityScope
                     )
@@ -58,7 +62,7 @@ fun SharedTransitionScope.MoviesListPage(
             }
         }
     }
-    LaunchedEffect(context.lazyVerticalGridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == moviesViewModel.movies.size - 1 && !moviesViewModel.moviesFetching.value) {
+    LaunchedEffect(lazyVerticalGridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index == movies.size - 1 && !moviesViewModel.moviesFetching.value) {
         moviesViewModel.addMovies()
     }
 }
