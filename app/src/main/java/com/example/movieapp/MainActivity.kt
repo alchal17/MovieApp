@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
 
-            val moviesViewModel = hiltViewModel<MovieViewModel>()
+            val movieViewModel = hiltViewModel<MovieViewModel>()
             val navController = rememberNavController()
             MovieAppTheme {
                 SharedTransitionLayout {
@@ -37,7 +37,7 @@ class MainActivity : ComponentActivity() {
                         composable<Routes.MainScaffold> {
                             MainScaffold(
                                 animatedVisibilityScope = this,
-                                movieViewModel = moviesViewModel, mainNavController = navController
+                                movieViewModel = movieViewModel, mainNavController = navController
                             )
                         }
                         composable<Routes.MovieInfo> {

@@ -41,6 +41,7 @@ fun SharedTransitionScope.MoviesListPage(
     val movies by moviesViewModel.movies.collectAsState()
     val selectedColumnsFlow = ColumnsNumberDataStore.getSelectedColumns(context)
     val selectedColumns by selectedColumnsFlow.collectAsState(initial = 3)
+    val isLoading = moviesViewModel.moviesFetching.collectAsState()
 
     val isAtEndOfList by remember {
         derivedStateOf {
@@ -65,8 +66,7 @@ fun SharedTransitionScope.MoviesListPage(
             )
         }
     }
-
-    LaunchedEffect(isAtEndOfList && !moviesViewModel.moviesFetching.value) {
+    LaunchedEffect(isAtEndOfList && !isLoading.value) {
         moviesViewModel.addMovies()
     }
 }
