@@ -59,7 +59,7 @@ fun SharedTransitionScope.MovieInfo(
         ) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                null
+                null, tint = Color.White
             )
         }
     }) { padding ->
