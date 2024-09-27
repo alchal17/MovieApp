@@ -5,9 +5,9 @@ import io.ktor.client.features.json.JsonFeature
 import io.ktor.client.features.json.serializer.KotlinxSerializer
 import kotlinx.serialization.json.Json
 
-sealed class ServerResponse<T> {
-    data class Success<T>(val results: List<T>) : ServerResponse<T>()
-    data class Error<T>(val message: String) : ServerResponse<T>()
+sealed interface ServerResponse<out T> {
+    data class Success<T>(val results: List<T>) : ServerResponse<T>
+    data class Error(val message: String) : ServerResponse<Nothing>
 }
 
 abstract class BaseAPI {

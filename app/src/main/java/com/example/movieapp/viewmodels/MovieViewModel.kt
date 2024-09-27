@@ -9,6 +9,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,19 +21,19 @@ class MovieViewModel @Inject constructor(private val apiRepository: MovieAPI) : 
     private val _moviesFetching = MutableStateFlow(false)
     val moviesFetching = _moviesFetching.asStateFlow()
 
-    private var currentPage = 0
+    private val currentPage = AtomicInteger(0)
 
 
     suspend fun addMovies() {
         _moviesFetching.value = true
-        when (val response = apiRepository.getMovies(currentPage)) {
+        when (val response = apiRepository.getMovies(currentPage.get())) {
             is ServerResponse.Error -> {
                 Log.d("error", response.message)
             }
 
             is ServerResponse.Success -> {
                 _movies.value += response.results
-                currentPage++
+                currentPage.incrementAndGet()
             }
         }
         _moviesFetching.value = false
