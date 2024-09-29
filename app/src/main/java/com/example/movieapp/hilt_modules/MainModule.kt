@@ -1,10 +1,14 @@
 package com.example.movieapp.hilt_modules
 
-import com.example.movieapp.repositories.MovieAPI
+import com.example.movieapp.datastores.ColumnsNumberDataStorage
+import com.example.movieapp.datastores.LocalDataStorage
+import com.example.movieapp.network.BaseMovieService
+import com.example.movieapp.network.MovieService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -12,5 +16,10 @@ import javax.inject.Singleton
 object MainModule {
     @Provides
     @Singleton
-    fun provideMovieAPI(): MovieAPI = MovieAPI()
+    fun provideMovieService(): BaseMovieService = MovieService()
+
+    @Provides
+    @Singleton
+    @Named("ColumnsDataStorage")
+    fun provideColumnsDataStorage(): LocalDataStorage<Int> = ColumnsNumberDataStorage()
 }

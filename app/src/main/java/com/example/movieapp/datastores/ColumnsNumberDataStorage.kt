@@ -9,21 +9,22 @@ import androidx.datastore.preferences.preferencesDataStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+class ColumnsNumberDataStorage : LocalDataStorage<Int> {
 
-object ColumnsNumberDataStore {
     private val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = "settings")
 
-    private val COLUMNS_KEY = intPreferencesKey("columns_key")
+    private val key = intPreferencesKey("columns_key")
 
-    suspend fun saveSelectedColumns(context: Context, columns: Int) {
+    override suspend fun save(context: Context, value: Int) {
         context.dataStore.edit { preferences ->
-            preferences[COLUMNS_KEY] = columns
+            preferences[key] = value
         }
     }
 
-    fun getSelectedColumns(context: Context): Flow<Int> {
+    override fun get(context: Context): Flow<Int> {
         return context.dataStore.data.map { preferences ->
-            preferences[COLUMNS_KEY] ?: 3
+            preferences[key] ?: 3
         }
     }
+
 }

@@ -11,21 +11,27 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.movieapp.datastores.LocalDataStorage
 import com.example.movieapp.ui.elements.MainScaffold
 import com.example.movieapp.ui.pages.MovieInfo
 import com.example.movieapp.ui.pages.Routes
 import com.example.movieapp.ui.theme.MovieAppTheme
 import com.example.movieapp.viewmodels.MovieViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+import javax.inject.Named
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+    @Inject
+    @Named("ColumnsDataStorage")
+    lateinit var localDataStorage: LocalDataStorage<Int>
+
     @OptIn(ExperimentalSharedTransitionApi::class)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
             val movieViewModel = hiltViewModel<MovieViewModel>()
             val navController = rememberNavController()
             MovieAppTheme {
@@ -37,7 +43,9 @@ class MainActivity : ComponentActivity() {
                         composable<Routes.MainScaffold> {
                             MainScaffold(
                                 animatedVisibilityScope = this,
-                                movieViewModel = movieViewModel, mainNavController = navController
+                                movieViewModel = movieViewModel,
+                                mainNavController = navController,
+                                localDataStorage = localDataStorage
                             )
                         }
                         composable<Routes.MovieInfo> {

@@ -15,14 +15,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import com.example.movieapp.datastores.ColumnsNumberDataStore
+import com.example.movieapp.datastores.LocalDataStorage
 import kotlinx.coroutines.launch
 
 @Composable
-fun SettingsPage(context: Context) {
+fun SettingsPage(context: Context, localDataStorage: LocalDataStorage<Int>) {
     val coroutineScope = rememberCoroutineScope()
-
-    val selectedColumnsFlow = ColumnsNumberDataStore.getSelectedColumns(context)
+    val selectedColumnsFlow = localDataStorage.get(context)
     val selectedColumns by selectedColumnsFlow.collectAsState(initial = 3)
 
     Column(modifier = Modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
@@ -38,10 +37,7 @@ fun SettingsPage(context: Context) {
                         onClick = {
                             if (selectedColumns != it) {
                                 coroutineScope.launch {
-                                    ColumnsNumberDataStore.saveSelectedColumns(
-                                        context,
-                                        it
-                                    )
+                                    localDataStorage.save(context, it)
                                 }
                             }
                         })

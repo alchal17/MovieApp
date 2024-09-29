@@ -34,6 +34,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.movieapp.datastores.LocalDataStorage
 import com.example.movieapp.ui.pages.MoviesListPage
 import com.example.movieapp.ui.pages.Routes
 import com.example.movieapp.ui.pages.SettingsPage
@@ -54,7 +55,8 @@ private data class NavigationItem(
 fun SharedTransitionScope.MainScaffold(
     animatedVisibilityScope: AnimatedVisibilityScope,
     movieViewModel: MovieViewModel,
-    mainNavController: NavController
+    mainNavController: NavController,
+    localDataStorage: LocalDataStorage<Int>
 ) {
     val scaffoldVavController = rememberNavController()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -130,6 +132,7 @@ fun SharedTransitionScope.MainScaffold(
                         LocalContext.current,
                         animatedVisibilityScope = animatedVisibilityScope,
                         moviesViewModel = movieViewModel, lazyVerticalGridState = lazyGridState,
+                        localDataStorage = localDataStorage,
                         cardOnClick = { posterPath: String?,
                                         id: String,
                                         title: String,
@@ -149,7 +152,12 @@ fun SharedTransitionScope.MainScaffold(
                         },
                     )
                 }
-                composable<Routes.MainScaffoldRoutes.Settings> { SettingsPage(LocalContext.current) }
+                composable<Routes.MainScaffoldRoutes.Settings> {
+                    SettingsPage(
+                        LocalContext.current,
+                        localDataStorage
+                    )
+                }
             }
         }
     }
