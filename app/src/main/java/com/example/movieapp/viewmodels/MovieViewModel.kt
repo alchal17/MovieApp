@@ -3,7 +3,7 @@ package com.example.movieapp.viewmodels
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.movieapp.models.Movie
-import com.example.movieapp.network.BaseMovieService
+import com.example.movieapp.network.PaginationService
 import com.example.movieapp.network.ServerResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -11,9 +11,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.concurrent.atomic.AtomicInteger
 import javax.inject.Inject
+import javax.inject.Named
 
 @HiltViewModel
-class MovieViewModel @Inject constructor(private val apiRepository: BaseMovieService) :
+class MovieViewModel @Inject constructor(
+    @Named("MovieService") private val apiRepository: PaginationService<ServerResponse<Movie>>
+) :
     ViewModel() {
 
     private val _movies = MutableStateFlow<List<Movie>>(emptyList())

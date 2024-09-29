@@ -6,7 +6,7 @@ import io.ktor.client.request.get
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
-class MovieService : BaseMovieService() {
+class MovieService : BaseService(), PaginationService<ServerResponse<Movie>> {
 
     @Serializable
     private data class MovieResponse(
