@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -65,7 +66,13 @@ fun SharedTransitionScope.MoviesListPage(
             key = { index -> movies[index].uniqueID }) {
             Box(modifier = Modifier.height(200.dp)) {
                 if (selectedColumns == 1) {
-                    DetailedMovieCard(movies[it])
+                    Box(modifier = Modifier.padding(horizontal = 10.dp)) {
+                        DetailedMovieCard(
+                            movie = movies[it],
+                            onClick = cardOnClick,
+                            animatedVisibilityScope = animatedVisibilityScope
+                        )
+                    }
                 } else {
                     MovieCard(
                         movie = movies[it],

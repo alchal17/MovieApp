@@ -41,6 +41,8 @@ import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
@@ -138,9 +140,12 @@ fun SharedTransitionScope.MovieCard(
                     }
                 }
                 Text(
+                    textAlign = TextAlign.Center,
+                    fontWeight = FontWeight.Bold,
                     text = movie.title,
                     style = (TextStyle(fontSize = 12.sp, color = Black)),
                     modifier = Modifier
+                        .fillMaxWidth()
                         .padding(horizontal = 4.dp, vertical = 5.dp)
                         .sharedBounds(
                             sharedContentState = rememberSharedContentState(key = "title/${movie.uniqueID}"),
