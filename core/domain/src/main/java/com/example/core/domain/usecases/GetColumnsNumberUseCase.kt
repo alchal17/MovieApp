@@ -5,6 +5,6 @@ import com.example.core.domain.repositories.SharedPreferencesKeyNames
 import javax.inject.Inject
 
 class GetColumnsNumberUseCase @Inject constructor(private val innerStorageRepository: InnerStorageRepository) {
-    suspend fun invoke(): Int =
-        innerStorageRepository.getInt(SharedPreferencesKeyNames.COLUMNS_NUMBER)
+    suspend operator fun invoke(): Int =
+        innerStorageRepository.getInt(SharedPreferencesKeyNames.COLUMNS_NUMBER, 3)
 }
