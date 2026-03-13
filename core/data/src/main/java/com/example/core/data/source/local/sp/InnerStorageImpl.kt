@@ -7,10 +7,13 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
 
-internal class InnerStorageImpl(context: Context) : BaseDataStore(context), InnerStorage {
+internal class InnerStorageImpl @Inject constructor(@ApplicationContext context: Context) :
+    BaseDataStore(context), InnerStorage {
 
     private val preferencesDataStore: DataStore<Preferences> by lazy {
         getDataStore()

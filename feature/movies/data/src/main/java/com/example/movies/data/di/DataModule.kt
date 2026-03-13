@@ -18,7 +18,6 @@ import javax.inject.Singleton
 internal abstract class DataModule {
 
     @Binds
-    @Singleton
     abstract fun bindMovieRepository(impl: MoviesRepositoryImpl): MovieRepository
 
     companion object {
