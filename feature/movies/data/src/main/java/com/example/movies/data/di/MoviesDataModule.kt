@@ -15,7 +15,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-internal abstract class DataModule {
+internal abstract class MoviesDataModule {
 
     @Binds
     abstract fun bindMovieRepository(impl: MoviesRepositoryImpl): MovieRepository

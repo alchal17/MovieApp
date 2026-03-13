@@ -1,6 +1,6 @@
-package com.example.core.data.source.local.sp
+package com.example.core.domain.repositories
 
-interface InnerStorage {
+interface InnerStorageRepository {
     suspend fun setInt(sharedPreferencesKeyName: SharedPreferencesKeyNames, value: Int)
 
     suspend fun getInt(

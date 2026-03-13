@@ -1,4 +1,4 @@
-package com.example.core.data.source.local.sp
+package com.example.core.data.repositories
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -7,13 +7,17 @@ import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.example.core.domain.repositories.InnerStorageRepository
+import com.example.core.domain.repositories.SharedPreferencesKeyNames
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
-internal class InnerStorageImpl @Inject constructor(@ApplicationContext context: Context) :
-    BaseDataStore(context), InnerStorage {
+internal class InnerStorageRepositoryImpl @Inject constructor(@ApplicationContext context: Context) :
+    BaseDataStore(context), InnerStorageRepository {
 
     private val preferencesDataStore: DataStore<Preferences> by lazy {
         getDataStore()
@@ -32,20 +36,22 @@ internal class InnerStorageImpl @Inject constructor(@ApplicationContext context:
     }
 
     override suspend fun setInt(sharedPreferencesKeyName: SharedPreferencesKeyNames, value: Int) {
-        try {
-            preferencesDataStore.edit { preferences ->
-                preferences[getIntKey(sharedPreferencesKeyName)] = value
-            }
-        } catch (_: Exception) {
+        withContext(Dispatchers.IO) {
+            try {
+                preferencesDataStore.edit { preferences ->
+                    preferences[getIntKey(sharedPreferencesKeyName)] = value
+                }
+            } catch (_: Exception) {
 
+            }
         }
     }
 
     override suspend fun getInt(
         sharedPreferencesKeyName: SharedPreferencesKeyNames,
         defaultValue: Int
-    ): Int {
-        return try {
+    ): Int = withContext(Dispatchers.IO) {
+        try {
             preferencesDataStore.data.map { preferences ->
                 preferences[getIntKey(sharedPreferencesKeyName)] ?: defaultValue
             }.first()
@@ -58,19 +64,21 @@ internal class InnerStorageImpl @Inject constructor(@ApplicationContext context:
         sharedPreferencesKeyNames: SharedPreferencesKeyNames,
         value: String
     ) {
-        try {
-            preferencesDataStore.edit { preferences ->
-                preferences[getStringKey(sharedPreferencesKeyNames)] = value
+        withContext(Dispatchers.IO) {
+            try {
+                preferencesDataStore.edit { preferences ->
+                    preferences[getStringKey(sharedPreferencesKeyNames)] = value
+                }
+            } catch (_: Exception) {
             }
-        } catch (_: Exception) {
         }
     }
 
     override suspend fun getString(
         sharedPreferencesKeyNames: SharedPreferencesKeyNames,
         defaultValue: String
-    ): String {
-        return try {
+    ): String = withContext(Dispatchers.IO) {
+        try {
             preferencesDataStore.data.map { preferences ->
                 preferences[getStringKey(sharedPreferencesKeyNames)] ?: defaultValue
             }.first()
@@ -83,19 +91,21 @@ internal class InnerStorageImpl @Inject constructor(@ApplicationContext context:
         sharedPreferencesKeyNames: SharedPreferencesKeyNames,
         value: Boolean
     ) {
-        try {
-            preferencesDataStore.edit { preferences ->
-                preferences[getBooleanKey(sharedPreferencesKeyNames)] = value
+        withContext(Dispatchers.IO) {
+            try {
+                preferencesDataStore.edit { preferences ->
+                    preferences[getBooleanKey(sharedPreferencesKeyNames)] = value
+                }
+            } catch (_: Exception) {
             }
-        } catch (_: Exception) {
         }
     }
 
     override suspend fun getBoolean(
         sharedPreferencesKeyNames: SharedPreferencesKeyNames,
         defaultValue: Boolean
-    ): Boolean {
-        return try {
+    ): Boolean = withContext(Dispatchers.IO) {
+        try {
             preferencesDataStore.data.map { preferences ->
                 preferences[getBooleanKey(sharedPreferencesKeyNames)] ?: defaultValue
             }.first()

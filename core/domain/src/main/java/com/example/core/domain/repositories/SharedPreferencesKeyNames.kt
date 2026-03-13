@@ -1,4 +1,4 @@
-package com.example.core.data.source.local.sp
+package com.example.core.domain.repositories
 
 enum class SharedPreferencesKeyNames(val keyName: String) {
     COLUMNS_NUMBER("columns_number")

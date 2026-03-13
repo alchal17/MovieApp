@@ -1,8 +1,12 @@
 package com.example.movies.presentation.pages
 
+import kotlinx.serialization.Serializable
+
 
 sealed interface Routes {
-    data object Movies: Routes
-    data object Settings: Routes
-}
+    @Serializable
+    data object Movies : Routes
 
+    @Serializable
+    data object Settings : Routes
+}
