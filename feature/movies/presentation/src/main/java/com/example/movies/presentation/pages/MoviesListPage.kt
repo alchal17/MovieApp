@@ -1,6 +1,6 @@
 package com.example.movies.presentation.pages
 
-import android.content.Context
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
@@ -14,27 +14,28 @@ import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.example.movieapp.data.sp.LocalDataStorage
 import com.example.movies.presentation.elements.DetailedMovieCard
 import com.example.movies.presentation.elements.MovieCard
-import com.example.movieapp.presentation.movies.viewmodels.MovieViewModel
-import kotlin.collections.get
+import com.example.movies.presentation.uiModel.MovieUiModel
+import com.example.movies.presentation.uiStates.MoviesResult
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun SharedTransitionScope.MoviesListPage(
-    context: Context,
-    moviesViewModel: MovieViewModel,
+internal fun SharedTransitionScope.MoviesListPage(
+    movies: List<MovieUiModel>,
+    selectedColumns: Int,
+    isLoading: Boolean,
+    moviesResult: MoviesResult,
     lazyVerticalGridState: LazyGridState,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    localDataStorage: LocalDataStorage<Int>,
+    addMovies: () -> Unit,
     cardOnClick: (
         posterPath: String?,
         id: String,
@@ -44,10 +45,8 @@ fun SharedTransitionScope.MoviesListPage(
         originalLanguage: String
     ) -> Unit,
 ) {
-    val movies by moviesViewModel.movies.collectAsState()
-    val selectedColumnsFlow = localDataStorage.get(context)
-    val selectedColumns by selectedColumnsFlow.collectAsState(initial = 3)
-    val isLoading = moviesViewModel.moviesFetching.collectAsState()
+
+    val context = LocalContext.current
 
     val isAtEndOfList by remember {
         derivedStateOf {
@@ -64,7 +63,7 @@ fun SharedTransitionScope.MoviesListPage(
     ) {
         items(
             movies.size,
-            key = { index -> movies[index].uniqueID }) {
+            key = { index -> movies[index].uuid }) {
             Box(modifier = Modifier.height(200.dp)) {
                 if (selectedColumns == 1) {
                     Box(modifier = Modifier.padding(horizontal = 10.dp)) {
@@ -84,7 +83,16 @@ fun SharedTransitionScope.MoviesListPage(
             }
         }
     }
-    LaunchedEffect(isAtEndOfList && !isLoading.value) {
-        moviesViewModel.addMovies()
+    LaunchedEffect(isAtEndOfList && !isLoading) {
+        addMovies()
+    }
+    LaunchedEffect(moviesResult) {
+        when (moviesResult) {
+            is MoviesResult.Error -> {
+                Toast.makeText(context, "Error: " + moviesResult.message, Toast.LENGTH_SHORT).show()
+            }
+
+            MoviesResult.Success -> {}
+        }
     }
 }

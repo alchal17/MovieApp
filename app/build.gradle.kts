@@ -53,6 +53,9 @@ kotlin {
 }
 
 dependencies {
+    implementation(project(":feature:movies:presentation"))
+    implementation(project(":feature:settings:presentation"))
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
@@ -72,16 +75,9 @@ dependencies {
 
     implementation(libs.coil.compose)
 
-    implementation(libs.ktor.client.core)
-    implementation(libs.ktor.client.okhttp)
-    implementation(libs.ktor.client.content.negotiation)
-    implementation(libs.ktor.serialization.kotlinx.json)
-    implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.navigation.compose)
-
-    implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)

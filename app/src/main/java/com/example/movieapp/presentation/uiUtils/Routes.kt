@@ -1,7 +1,6 @@
-package com.example.movies.presentation.pages
+package com.example.movieapp.presentation.uiUtils
 
 import kotlinx.serialization.Serializable
-
 
 sealed interface Routes {
     @Serializable

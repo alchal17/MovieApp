@@ -4,13 +4,15 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.core.domain.usecases.GetColumnsNumberUseCase
 import com.example.core.domain.usecases.SetColumnsNumberUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SettingsViewModel @Inject constructor(
+@HiltViewModel
+internal class SettingsViewModel @Inject constructor(
     private val getColumnsNumberUseCase: GetColumnsNumberUseCase,
     private val setColumnsNumberUseCase: SetColumnsNumberUseCase
 ) :
