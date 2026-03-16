@@ -23,7 +23,8 @@ import androidx.compose.ui.unit.dp
 import com.example.movies.presentation.elements.DetailedMovieCard
 import com.example.movies.presentation.elements.MovieCard
 import com.example.movies.presentation.uiModel.MovieUiModel
-import com.example.movies.presentation.uiStates.MoviesResult
+import com.example.movies.presentation.uiStates.MoviesError
+import kotlinx.coroutines.flow.Flow
 
 
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -32,7 +33,7 @@ internal fun SharedTransitionScope.MoviesListPage(
     movies: List<MovieUiModel>,
     selectedColumns: Int,
     isLoading: Boolean,
-    moviesResult: MoviesResult,
+    moviesError: Flow<MoviesError>,
     lazyVerticalGridState: LazyGridState,
     animatedVisibilityScope: AnimatedVisibilityScope,
     addMovies: () -> Unit,
@@ -86,13 +87,9 @@ internal fun SharedTransitionScope.MoviesListPage(
     LaunchedEffect(isAtEndOfList && !isLoading) {
         addMovies()
     }
-    LaunchedEffect(moviesResult) {
-        when (moviesResult) {
-            is MoviesResult.Error -> {
-                Toast.makeText(context, "Error: " + moviesResult.message, Toast.LENGTH_SHORT).show()
-            }
-
-            MoviesResult.Success -> {}
+    LaunchedEffect(Unit) {
+        moviesError.collect { error ->
+            Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
         }
     }
 }

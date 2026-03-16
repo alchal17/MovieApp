@@ -22,7 +22,6 @@ fun MoviesPage() {
     val movies by movieViewModel.movies.collectAsStateWithLifecycle()
     val selectedColumn by movieViewModel.columnsNumber.collectAsStateWithLifecycle()
     val isLoading by movieViewModel.moviesFetching.collectAsStateWithLifecycle()
-    val moviesResult by movieViewModel.moviesResult.collectAsStateWithLifecycle()
 
     val lazyVerticalGridState = rememberLazyGridState()
 
@@ -33,7 +32,7 @@ fun MoviesPage() {
                     movies = movies,
                     selectedColumns = selectedColumn,
                     isLoading = isLoading,
-                    moviesResult = moviesResult,
+                    moviesError = movieViewModel.moviesError,
                     lazyVerticalGridState = lazyVerticalGridState,
                     animatedVisibilityScope = this@composable,
                     addMovies = movieViewModel::addMovies,
