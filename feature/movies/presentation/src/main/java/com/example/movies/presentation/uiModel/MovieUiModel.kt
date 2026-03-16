@@ -1,8 +1,7 @@
 package com.example.movies.presentation.uiModel
 
 import androidx.compose.runtime.Immutable
-import kotlin.uuid.ExperimentalUuidApi
-import kotlin.uuid.Uuid
+import java.util.UUID
 
 @Immutable
 internal data class MovieUiModel(
@@ -14,6 +13,5 @@ internal data class MovieUiModel(
     val releaseDate: String,
     val voteAverage: Double,
 ) {
-    @OptIn(ExperimentalUuidApi::class)
-    val uuid = Uuid.generateV7().toString()
+    val uuid = UUID.randomUUID().toString()
 }

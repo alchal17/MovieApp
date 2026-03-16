@@ -2,13 +2,10 @@ package com.example.movies.presentation.elements
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.ArcMode
-import androidx.compose.animation.core.ExperimentalAnimationSpecApi
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.keyframes
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -51,13 +48,12 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Scale
 import coil.size.Size
-import com.example.movieapp.data.dto.MovieDto
+import com.example.movies.presentation.uiModel.MovieUiModel
 
 
-@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalAnimationSpecApi::class)
 @Composable
-fun SharedTransitionScope.MovieCard(
-    movieDto: MovieDto,
+internal fun SharedTransitionScope.MovieCard(
+    movieDto: MovieUiModel,
     onClick: (
         posterPath: String?,
         id: String,
@@ -86,7 +82,7 @@ fun SharedTransitionScope.MovieCard(
                 .clickable {
                     onClick(
                         movieDto.posterPath,
-                        movieDto.uniqueID,
+                        movieDto.uuid,
                         movieDto.title,
                         movieDto.overview,
                         movieDto.releaseDate,
@@ -115,9 +111,9 @@ fun SharedTransitionScope.MovieCard(
                         modifier = Modifier
                             .fillMaxSize()
                             .sharedElement(
-                                state = rememberSharedContentState(key = "image/${movieDto.uniqueID}"),
-                                animatedVisibilityScope = animatedVisibilityScope,
-                                boundsTransform = { _, _ -> tween(500) })
+                                sharedContentState = rememberSharedContentState(key = "poster/${movieDto.uuid}"),
+                                animatedVisibilityScope = animatedVisibilityScope
+                            )
                     )
                     Row(
                         modifier = Modifier
@@ -148,7 +144,7 @@ fun SharedTransitionScope.MovieCard(
                         .fillMaxWidth()
                         .padding(horizontal = 4.dp, vertical = 5.dp)
                         .sharedBounds(
-                            sharedContentState = rememberSharedContentState(key = "title/${movieDto.uniqueID}"),
+                            sharedContentState = rememberSharedContentState(key = "title/${movieDto.uuid}"),
                             animatedVisibilityScope = animatedVisibilityScope,
                             boundsTransform = { initialBounds, targetBounds ->
                                 keyframes {

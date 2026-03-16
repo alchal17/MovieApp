@@ -7,7 +7,6 @@ import androidx.compose.animation.core.ArcMode
 import androidx.compose.animation.core.ExperimentalAnimationSpecApi
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.keyframes
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -80,9 +79,9 @@ fun SharedTransitionScope.MovieInfo(
                         .padding(horizontal = 25.dp)
                         .aspectRatio(9 / 16f)
                         .sharedElement(
-                            state = rememberSharedContentState(key = "image/${id}"),
-                            animatedVisibilityScope = animatedVisibilityScope,
-                            boundsTransform = { _, _ -> tween(500) }),
+                            sharedContentState = rememberSharedContentState(key = "poster/${id}"),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        ),
                     contentScale = ContentScale.Fit,
                 )
 

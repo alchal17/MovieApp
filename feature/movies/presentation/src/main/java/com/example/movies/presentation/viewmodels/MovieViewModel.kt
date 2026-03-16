@@ -43,21 +43,25 @@ internal class MovieViewModel @Inject constructor(
             val savedColumnsNumber = getColumnsNumberUseCase()
             _columnsNumber.update { savedColumnsNumber }
         }
+        viewModelScope.launch {
+            addMovies()
+        }
     }
 
     fun addMovies() {
+        if (_moviesFetching.value) return
+
         viewModelScope.launch {
             _moviesFetching.update { true }
             when (val result = getMoviesByPageUseCase(currentPage.get())) {
                 is Result.Error -> {
-//                    _moviesError.update { MoviesError.Error(result.message) }
                     _moviesError.emit(MoviesError(result.message))
                 }
 
                 is Result.Success -> {
                     val moviesUiModel = result.data.map { it.toMovieUiModel() }
                     _movies.update { it + moviesUiModel }
-                    currentPage.getAndAdd(1)
+                    currentPage.incrementAndGet()
                 }
             }
             _moviesFetching.update { false }

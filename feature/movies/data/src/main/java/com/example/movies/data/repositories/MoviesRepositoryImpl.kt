@@ -10,7 +10,7 @@ import javax.inject.Inject
 internal class MoviesRepositoryImpl @Inject constructor(private val moviesService: MoviesService) :
     MovieRepository {
     override suspend fun findByPage(pageNumber: Int): Result<List<Movie>> {
-        return when (val result = moviesService.getByPage(1)) {
+        return when (val result = moviesService.getByPage(pageNumber)) {
             is Result.Error -> result
             is Result.Success -> {
                 val dataMovies = result.data

@@ -2,13 +2,10 @@ package com.example.movies.presentation.elements
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.ArcMode
-import androidx.compose.animation.core.ExperimentalAnimationSpecApi
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.keyframes
-import androidx.compose.animation.core.tween
 import androidx.compose.animation.scaleIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,6 +18,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
@@ -52,7 +51,6 @@ import coil.size.Scale
 import coil.size.Size
 import com.example.movies.presentation.uiModel.MovieUiModel
 
-@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalAnimationSpecApi::class)
 @Composable
 internal fun SharedTransitionScope.DetailedMovieCard(
     movieDto: MovieUiModel,
@@ -104,9 +102,9 @@ internal fun SharedTransitionScope.DetailedMovieCard(
                         modifier = Modifier
                             .fillMaxSize()
                             .sharedElement(
-                                state = rememberSharedContentState(key = "image/${movieDto.uuid}"),
-                                animatedVisibilityScope = animatedVisibilityScope,
-                                boundsTransform = { _, _ -> tween(500) })
+                                sharedContentState = rememberSharedContentState(key = "poster/${movieDto.uuid}"),
+                                animatedVisibilityScope = animatedVisibilityScope
+                            )
 
                     )
                     Row(

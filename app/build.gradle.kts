@@ -55,6 +55,8 @@ kotlin {
 dependencies {
     implementation(project(":feature:movies:presentation"))
     implementation(project(":feature:settings:presentation"))
+    implementation(project(":feature:movies:data"))
+    implementation(project(":core:data"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

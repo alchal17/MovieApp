@@ -2,7 +2,6 @@ package com.example.movies.presentation.pages
 
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -27,7 +26,6 @@ import com.example.movies.presentation.uiStates.MoviesError
 import kotlinx.coroutines.flow.Flow
 
 
-@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun SharedTransitionScope.MoviesListPage(
     movies: List<MovieUiModel>,
@@ -51,9 +49,10 @@ internal fun SharedTransitionScope.MoviesListPage(
 
     val isAtEndOfList by remember {
         derivedStateOf {
-            val lastVisibleIndex =
-                lazyVerticalGridState.layoutInfo.visibleItemsInfo.lastOrNull()?.index
-            lastVisibleIndex == movies.size - 1
+            val layoutInfo = lazyVerticalGridState.layoutInfo
+            val totalItems = layoutInfo.totalItemsCount
+            val lastVisibleIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: 0
+            lastVisibleIndex >= totalItems - 1
         }
     }
 
@@ -84,8 +83,10 @@ internal fun SharedTransitionScope.MoviesListPage(
             }
         }
     }
-    LaunchedEffect(isAtEndOfList && !isLoading) {
-        addMovies()
+    LaunchedEffect(isAtEndOfList) {
+        if (isAtEndOfList && !isLoading) {
+            addMovies()
+        }
     }
     LaunchedEffect(Unit) {
         moviesError.collect { error ->
