@@ -14,7 +14,7 @@ import com.example.movies.presentation.uiUtils.MovieRoutes
 import com.example.movies.presentation.viewmodels.MovieViewModel
 
 @Composable
-fun MoviesPage() {
+fun MoviesPage(navigateToSettings: () -> Unit) {
     val navController = rememberNavController()
 
     val movieViewModel = hiltViewModel<MovieViewModel>()
@@ -47,7 +47,8 @@ fun MoviesPage() {
                                 originalLanguage = originalLanguage
                             )
                         )
-                    }
+                    },
+                    navigateToSettings = navigateToSettings
                 )
             }
 

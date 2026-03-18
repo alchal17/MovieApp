@@ -41,6 +41,7 @@ kotlin {
 dependencies {
     implementation(project(":feature:movies:domain"))
     implementation(project(":core:domain"))
+    implementation(project(":core:presentation"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

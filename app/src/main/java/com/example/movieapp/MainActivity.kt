@@ -28,8 +28,18 @@ class MainActivity : ComponentActivity() {
                     navController = navController,
                     startDestination = Routes.Movies
                 ) {
-                    composable<Routes.Movies> { MoviesPage() }
-                    composable<Routes.Settings> { SettingsPage() }
+                    composable<Routes.Movies> {
+                        MoviesPage(
+                            navigateToSettings = { navController.navigate(Routes.Settings) }
+                        )
+                    }
+                    composable<Routes.Settings> {
+                        SettingsPage(navigateToMovies = {
+                            navController.navigate(
+                                Routes.Movies
+                            )
+                        })
+                    }
                 }
             }
         }

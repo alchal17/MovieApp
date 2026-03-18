@@ -76,6 +76,7 @@ internal fun SharedTransitionScope.MovieCard(
 
     AnimatedVisibility(visible = visible, enter = scaleIn()) {
         Card(
+            colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation = CardDefaults.cardElevation(defaultElevation = 16.dp),
             modifier = Modifier
                 .padding(horizontal = 8.dp)
