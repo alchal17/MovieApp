@@ -12,6 +12,5 @@ internal data class MovieUiModel(
     val originalLanguage: String,
     val releaseDate: String,
     val voteAverage: Double,
-) {
-    val uuid = UUID.randomUUID().toString()
-}
+    val uuid: String = UUID.randomUUID().toString()
+)

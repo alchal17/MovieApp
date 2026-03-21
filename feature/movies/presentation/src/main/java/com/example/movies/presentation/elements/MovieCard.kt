@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -43,8 +44,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter
-import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest
 import coil.size.Scale
 import coil.size.Size
@@ -64,15 +63,11 @@ internal fun SharedTransitionScope.MovieCard(
     ) -> Unit,
     animatedVisibilityScope: AnimatedVisibilityScope
 ) {
-    val imagePainter = rememberAsyncImagePainter(
-        model = ImageRequest.Builder(LocalContext.current)
-            .data("https://image.tmdb.org/t/p/w500${movieDto.posterPath}")
-            .size(Size(40, 225))
-            .scale(Scale.FILL)
-            .build()
-    )
-
     var visible by remember { mutableStateOf(false) }
+
+    var isLoading by remember { mutableStateOf(true) }
+
+    var isError by remember { mutableStateOf(false) }
 
     AnimatedVisibility(visible = visible, enter = scaleIn()) {
         Card(
@@ -97,13 +92,12 @@ internal fun SharedTransitionScope.MovieCard(
                         .fillMaxWidth()
                         .weight(1f)
                 ) {
-                    if (imagePainter.state is AsyncImagePainter.State.Loading) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center),
-                            color = Black
-                        )
-                    }
                     AsyncImage(
+                        onError = {
+                            isLoading = false
+                            isError = true
+                        },
+                        onSuccess = { isLoading = false },
                         contentDescription = "Movie poster",
                         model = ImageRequest.Builder(LocalContext.current)
                             .data("https://image.tmdb.org/t/p/w500${movieDto.posterPath}")
@@ -116,6 +110,19 @@ internal fun SharedTransitionScope.MovieCard(
                                 animatedVisibilityScope = animatedVisibilityScope
                             )
                     )
+                    if (isLoading) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.align(Alignment.Center),
+                            color = Black
+                        )
+                    }
+                    if (isError) {
+                        Icon(
+                            modifier = Modifier.align(Alignment.Center),
+                            imageVector = Icons.Default.Error,
+                            contentDescription = "Error loading image for ${movieDto.title}"
+                        )
+                    }
                     Row(
                         modifier = Modifier
                             .padding(start = 5.dp, top = 4.dp)

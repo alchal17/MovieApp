@@ -23,7 +23,7 @@ internal class MoviesService @Inject constructor(private val client: HttpClient)
         withContext(Dispatchers.IO) {
             try {
                 val movies =
-                    client.get("${DataConstants.SERVER_PATH}/3/trending/movie/day?api_key=${DataConstants.API_KEY}&page=${pageNumber + 1}")
+                    client.get("${DataConstants.SERVER_PATH}/3/trending/movie/day?api_key=${DataConstants.API_KEY}&page=$pageNumber")
                         .body<MovieResponse>()
                 Result.Success(movies.results)
             } catch (e: Exception) {
