@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.movies.presentation"
+    namespace = "com.example.settings.presentation"
     compileSdk = 36
 
     defaultConfig {
