@@ -31,12 +31,13 @@ import com.example.movies.presentation.elements.DetailedMovieCard
 import com.example.movies.presentation.elements.MovieCard
 import com.example.movies.presentation.uiModel.MovieUiModel
 import com.example.movies.presentation.uiStates.MoviesError
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 
 
 @Composable
 internal fun SharedTransitionScope.MoviesListPage(
-    movies: List<MovieUiModel>,
+    movies: ImmutableList<MovieUiModel>,
     selectedColumns: Int,
     isLoading: Boolean,
     moviesError: Flow<MoviesError>,

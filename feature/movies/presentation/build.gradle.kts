@@ -67,4 +67,6 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
 
     implementation(libs.androidx.material.icons.extended)
+
+    implementation(libs.kotlinx.collections.immutable)
 }

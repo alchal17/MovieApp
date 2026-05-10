@@ -9,6 +9,9 @@ import com.example.movies.presentation.mappers.movies.toMovieUiModel
 import com.example.movies.presentation.uiModel.MovieUiModel
 import com.example.movies.presentation.uiStates.MoviesError
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,8 +30,8 @@ internal class MovieViewModel @Inject constructor(
     ViewModel() {
     private val _moviesError = MutableSharedFlow<MoviesError>()
     val moviesError = _moviesError.asSharedFlow()
-    private val _movies = MutableStateFlow<List<MovieUiModel>>(emptyList())
-    val movies: StateFlow<List<MovieUiModel>> = _movies.asStateFlow()
+    private val _movies = MutableStateFlow<ImmutableList<MovieUiModel>>(persistentListOf())
+    val movies: StateFlow<ImmutableList<MovieUiModel>> = _movies.asStateFlow()
 
     private val _moviesFetching = MutableStateFlow(false)
     val moviesFetching = _moviesFetching.asStateFlow()
@@ -60,7 +63,7 @@ internal class MovieViewModel @Inject constructor(
 
                 is Result.Success -> {
                     val moviesUiModel = result.data.map { it.toMovieUiModel() }
-                    _movies.update { it + moviesUiModel }
+                    _movies.update { (it + moviesUiModel).toImmutableList() }
                     currentPage.incrementAndGet()
                 }
             }

@@ -36,7 +36,7 @@ internal abstract class MoviesDataModule {
                         isLenient = true
                         encodeDefaults = false
                     })
-                }
+                 }
             }
         }
 
